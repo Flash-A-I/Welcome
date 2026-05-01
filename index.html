@@ -3,202 +3,256 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meine GitHub Page</title>
+  <title>Meine GitHub Page + Game</title>
   <style>
     /* Grundlayout */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
       color: #f8fafc;
-      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%),
-                  radial-gradient(circle at bottom, rgba(14, 116, 144, 0.15), transparent 60%),
-                  #0f172a;
+      background: #0f172a;
       overflow-x: hidden;
+      /* Animierter Background-Gradient */
+      background: linear-gradient(125deg, #0f172a, #1e293b, #0f172a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Hero-Sektion */
     .hero {
       position: relative;
-      padding: clamp(4rem, 8vw, 6rem) clamp(1rem, 6vw, 6rem);
+      padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 6vw, 6rem);
       max-width: 1200px;
       margin: 0 auto;
-    }
-
-    .hero__content {
-      position: relative;
       z-index: 2;
-      display: grid;
-      gap: clamp(2rem, 5vw, 3rem);
     }
 
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 3.8rem);
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      font-size: clamp(1.1rem, 3vw, 1.4rem);
-      max-width: 580px;
-      color: #e2e8f0;
-    }
+    .hero__content { display: grid; gap: 2rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+    .subtitle { font-size: 1.1rem; max-width: 580px; color: #e2e8f0; }
 
     /* Cards */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: clamp(1.2rem, 3vw, 2rem);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
 
     .card {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      border-radius: 18px;
-      padding: clamp(1.4rem, 4vw, 2rem);
-      box-shadow: 0 25px 45px rgba(15, 23, 42, 0.35);
-      animation: float 6s ease-in-out infinite;
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
     }
+    .card:hover { transform: translateY(-5px); }
 
-    .card:nth-child(2) { animation-delay: 1.2s; }
-    .card:nth-child(3) { animation-delay: 2.4s; }
-
-    .card h2 {
-      font-size: clamp(1.2rem, 3vw, 1.5rem);
-      margin-top: 0;
-    }
-
-    .card p {
-      color: #cbd5f5;
-      line-height: 1.6;
-    }
-
-    .card a:not(.btn) {
-      color: #38bdf8;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .card a:not(.btn):hover {
-      text-decoration: underline;
-    }
-
-    /* Button */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+      display: inline-block;
       margin-top: 1rem;
-      padding: 0.65rem 1.2rem;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: #0f172a !important; /* Force dark text on bright button */
-      font-weight: 600;
+      padding: 0.5rem 1rem;
+      background: #38bdf8;
+      color: #0f172a;
       text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 20px;
+      font-weight: bold;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(14, 165, 233, 0.35);
-      text-decoration: none !important;
+    /* --- MINIGAME SEKTION --- */
+    .game-container {
+      margin: 4rem auto;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
     }
 
-    /* Hintergrund-Akzente */
-    .accent {
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(120px);
-      opacity: 0.55;
+    #gameCanvas {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid #38bdf8;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 600px;
+      display: block;
+    }
+
+    .game-info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    /* Hintergrund-Partikel (Sterne) */
+    .particles {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
       z-index: 1;
-      mix-blend-mode: screen;
-      animation: drift 12s ease-in-out infinite;
-    }
-
-    .accent-1 {
-      width: 32vw;
-      height: 32vw;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.7), transparent 60%);
-      top: 5%;
-      left: -12%;
-    }
-
-    .accent-2 {
-      width: 28vw;
-      height: 28vw;
-      background: radial-gradient(circle, rgba(129, 140, 248, 0.7), transparent 60%);
-      bottom: 10%;
-      right: -8%;
-      animation-delay: 3s;
-    }
-
-    .accent-3 {
-      width: 22vw;
-      height: 22vw;
-      background: radial-gradient(circle, rgba(45, 212, 191, 0.6), transparent 65%);
-      top: 45%;
-      right: 15%;
-      animation-delay: 6s;
-    }
-
-    /* Animationen */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(4%, -6%) scale(1.05); }
-    }
-
-    /* Mobile Tweaks */
-    @media (max-width: 600px) {
-      .hero {
-        padding-top: 6rem;
-      }
-
-      .accent {
-        opacity: 0.4;
-      }
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <main class="hero">
-    <span class="accent accent-1"></span>
-    <span class="accent accent-2"></span>
-    <span class="accent accent-3"></span>
 
+  <!-- Partikel Hintergrund -->
+  <canvas class="particles" id="particleCanvas"></canvas>
+
+  <main class="hero">
     <div class="hero__content">
       <h1>Hallo, ich bin [Dein Name] 👋</h1>
-      <p class="subtitle">
-        Willkommen auf meiner GitHub Page. Hier findest du Projekte, Notizen und vieles mehr.
-      </p>
+      <p class="subtitle">Entwickler, Creator und Highscore-Jäger.</p>
+      
       <div class="cards">
         <article class="card">
-          <h2>⭐ Highlight-Projekt</h2>
-          <p>Kurzer Teaser für dein Lieblingsprojekt.</p>
-          <a href="https://github.com/dein-name/dein-projekt" target="_blank" class="btn">Mehr erfahren</a>
+          <h2>⭐ Projekt</h2>
+          <p>Mein aktuelles Highlight-Projekt auf GitHub.</p>
+          <a href="#" class="btn">Ansehen</a>
         </article>
         <article class="card">
-          <h2>🛠 Tech-Stack</h2>
-          <p>React • TypeScript • Node.js • Rust</p>
-        </article>
-        <article class="card">
-          <h2>📫 Kontakt</h2>
-          <p>Schreib mir gerne auf <a href="mailto:mail@beispiel.de">mail@beispiel.de</a>.</p>
+          <h2>🛠 Tech</h2>
+          <p>HTML • CSS • JS • Fun</p>
         </article>
       </div>
     </div>
+
+    <!-- Das Spiel -->
+    <section class="game-container">
+      <h3>🕹️ Mini-Game: Space Jump</h3>
+      <canvas id="gameCanvas" width="600" height="150"></canvas>
+      <p class="game-info">Klicke ins Feld oder drücke <b>Leertaste</b> zum Springen!</p>
+    </section>
   </main>
+
+  <script>
+    // --- PARTIKEL HINTERGRUND ---
+    const pCanvas = document.getElementById('particleCanvas');
+    const pCtx = pCanvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for(let i=0; i<80; i++) {
+      particles.push({
+        x: Math.random() * pCanvas.width,
+        y: Math.random() * pCanvas.height,
+        size: Math.random() * 2,
+        speed: Math.random() * 0.5 + 0.1
+      });
+    }
+
+    function drawParticles() {
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      pCtx.fillStyle = "white";
+      particles.forEach(p => {
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        pCtx.fill();
+        p.y -= p.speed;
+        if(p.y < 0) p.y = pCanvas.height;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // --- MINIGAME LOGIK ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let dino = { x: 50, y: 120, w: 20, h: 20, dy: 0, jumpPower: -8, grounded: true };
+    let obstacles = [];
+    let score = 0;
+    let gameActive = false;
+    let gravity = 0.4;
+
+    function drawDino() {
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+    }
+
+    function spawnObstacle() {
+      if (Math.random() < 0.02) {
+        obstacles.push({ x: canvas.width, y: 120, w: 15, h: 20, speed: 4 + (score / 100) });
+      }
+    }
+
+    function update() {
+      if (!gameActive) {
+        ctx.fillStyle = "white";
+        ctx.fillText("KLICKEN ZUM STARTEN", canvas.width/2 - 60, canvas.height/2);
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Boden-Linie
+      ctx.strokeStyle = "#334155";
+      ctx.beginPath(); ctx.moveTo(0, 140); ctx.lineTo(canvas.width, 140); ctx.stroke();
+
+      // Dino Physik
+      dino.dy += gravity;
+      dino.y += dino.dy;
+      if (dino.y > 120) {
+        dino.y = 120;
+        dino.dy = 0;
+        dino.grounded = true;
+      }
+
+      drawDino();
+
+      // Hindernisse
+      obstacles.forEach((obs, index) => {
+        obs.x -= obs.speed;
+        ctx.fillStyle = "#f43f5e";
+        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+
+        // Kollision
+        if (dino.x < obs.x + obs.w && dino.x + dino.w > obs.x && dino.y < obs.y + obs.h && dino.y + dino.h > obs.y) {
+          gameActive = false;
+          alert("Game Over! Score: " + score);
+          obstacles = [];
+          score = 0;
+        }
+
+        if (obs.x + obs.w < 0) {
+          obstacles.splice(index, 1);
+          score++;
+        }
+      });
+
+      spawnObstacle();
+      ctx.fillStyle = "white";
+      ctx.fillText("Score: " + score, 10, 20);
+      requestAnimationFrame(update);
+    }
+
+    function jump() {
+      if (dino.grounded) {
+        dino.dy = dino.jumpPower;
+        dino.grounded = false;
+        if (!gameActive) {
+          gameActive = true;
+          update();
+        }
+      }
+    }
+
+    window.addEventListener('keydown', (e) => { if(e.code === 'Space') jump(); });
+    canvas.addEventListener('click', jump);
+    update();
+  </script>
 </body>
 </html>
